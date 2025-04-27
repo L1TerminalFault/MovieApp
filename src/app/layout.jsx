@@ -1,4 +1,4 @@
-// import { Geist, Geist_Mono, DM_Mono } from "next/font/google";
+// import { Geist, Geist_Mono, DM_Sans } from "next/font/google";
 import "./globals.css";
 
 // const geistSans = Geist({
@@ -22,8 +22,9 @@ export const metadata = {
 export default async function RootLayout({ children }) {
 
   return (
-    <html lang="en" className="bg-[#141626]">
+    <html lang="en" className="bg-[#070816]">
       <body
+      className={`antialiased h-screen bg-[#070816]`}
         // className={`${geistSans.variable} ${geistMono.variable} antialiased h-full bg-[#141626]`}
       >
         <div className="">{children}</div>
