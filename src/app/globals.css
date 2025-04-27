@@ -94,3 +94,8 @@ a {
     @apply bg-background text-foreground;
   }
 }
+
+.fancy-text {
+  -webkit-text-stroke: 3px rgba(206, 206, 251, 0.5);
+  font-family: "Bebas Neue", sans-serif;
+}

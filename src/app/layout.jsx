@@ -1,15 +1,20 @@
-// import { Geist, Geist_Mono, DM_Sans } from "next/font/google";
+import { Geist, Geist_Mono, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
 
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
+const dmSans = DM_Sans({
+  variable: '--font-dm-sans',
+  subsets: ['latin']
+})
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata = {
   title: {
@@ -24,8 +29,8 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en" className="bg-[#070816]">
       <body
-      className={`antialiased h-screen bg-[#070816]`}
-        // className={`${geistSans.variable} ${geistMono.variable} antialiased h-full bg-[#141626]`}
+      // className={`antialiased h-screen bg-[#070816]`}
+        className={`${dmSans.variable} ${geistSans.variable} ${geistMono.variable} antialiased h-full bg-[#070816]`}
       >
         <div className="">{children}</div>
       </body>

@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from 'react-use';
 
 import hero from '@/../public/hero.png'
+import logo from '@/../public/logo.png'
 import Search from '@/components/Search';
 import Loading from '@/components/Loading';
 import MovieCard from '@/components/MovieCard';
 import { API_BASE_URL } from '@/lib/utils';
-import { getTrendingMovies, updateSearchCount } from '@/lib/appwrite';
-
+import noPoster from '@/../public/no-movie.png'
 
 const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMGY5ZTQ2ZmY2ZGUyOWIwY2ZiMDVmNmRiNTIxMmE2ZCIsIm5iZiI6MTc0NTQwOTYxMC4yMTEsInN1YiI6IjY4MDhkNjRhYjJiNzIyYWVkZjhhMDU2ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.C64ltt_fO4Jl-QnZPQlVT-bul1uivWZFTzuun9VBUBY'
 
@@ -35,7 +35,7 @@ export default function Home() {
 
   const loadTrendingMovies = async () => {
     try {
-      const movies = await getTrendingMovies()
+      const movies = await (await fetch('/api/trendingMovies')).json()
       setTrendingMovies(movies)
     } catch (error) {
       console.error(`Error fetching trending movies: ${error}`)
@@ -57,7 +57,10 @@ export default function Home() {
 
       // TODO: update appwrite to get the search term
       if (query && response.results.length)
-        await updateSearchCount(query, response.results[0])
+        await fetch('/api/postSearch', {
+          method: 'POST',
+          body: JSON.stringify({ query, movie: response.results[0] })
+        })
 
     } catch (error) {
       setErrorMessage("Error: Couldn't Fetch Movies")
@@ -73,9 +76,15 @@ export default function Home() {
 
   return (
     <div className="bg-transparent">
-      <div></div>
       <div className='bg-cover flex items-center justify-center flex-col bg-no-repeat bg-center bg-[url("../../public/hero-bg.png")]'>
         <div className="flex flex-col items-center justify-center">
+          {/* <div className='flex items-center justify-center'> */}
+            <Image
+              src={logo}
+              alt=''
+              className='pt-9 translate-y-6'
+            />
+          {/* </div> */}
           <Image
             src={hero}
             alt=''
@@ -97,21 +106,30 @@ export default function Home() {
           )
           : moviesList.length
             ? (
-              <div className='text-3xl flex items-center justify-center text-green-600'>
+              <div className='text-3xl flex items-center justify-center'>
                 <div className='max-w-7xl px-5 py-10 xs:py-8'>
 
-                  {trendingMovies.length ? (
-                    <div>
-                      <div className='fancy-text mt-[22px] text-nowrap text-xl sm:pl-10 pl-6 text-gray-100 font-semibold'>Trending Movies</div>
-                      {trendingMovies.map((movie, index) => (
-                        <div key={movie.$id} className='flex flex-row overflow-y-auto gap-5 -mt-10 w-full hide-scrollbar'>
-                          <div>{index + 1}</div>
-                          <Image
-                            src={movie.poster_url} alt=''
-                            className='w-[127px] h-[163px] rounded-lg object-cover -ml-3.5'
-                          />
-                        </div>
-                      ))}
+                  {trendingMovies?.length ? (
+                    <div className='mb-3 mx-4'>
+                      <div className='text-nowrap text-xl sm:pl-5 pl-2 text-gray-100 font-semibold'>Trending Movies</div>
+                      <div className='flex mt-[56px]'>
+                        {trendingMovies.map((movie, index) => (
+                          <div key={movie.$id} className='flex flex-row overflow-y-auto gap-5 -mt-10 w-full hide-scrollbar'>
+                            <div className='flex items-center flex-row w-40 h-52'>
+                              <div className='fancy-text text-9xl'>{index + 1}</div>
+                              <div className='absolute translate-x-16'>
+                                <Image
+                                  loading='lazy'
+                                  src={movie.poster_url === 'https://image.tmdb.org/t/p/w500null' ? noPoster : movie.poster_url} alt=''
+                                  width={127}
+                                  height={163}
+                                  className='w-[127px] h-[163px] rounded-lg object-cover -ml-3.5'
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ) : null}
 
