@@ -9,6 +9,7 @@ import Search from '@/components/Search';
 import Loading from '@/components/Loading';
 import MovieCard from '@/components/MovieCard';
 import { API_BASE_URL } from '@/lib/utils';
+import { getTrendingMovies, updateSearchCount } from '@/lib/appwrite';
 
 
 const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMGY5ZTQ2ZmY2ZGUyOWIwY2ZiMDVmNmRiNTIxMmE2ZCIsIm5iZiI6MTc0NTQwOTYxMC4yMTEsInN1YiI6IjY4MDhkNjRhYjJiNzIyYWVkZjhhMDU2ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.C64ltt_fO4Jl-QnZPQlVT-bul1uivWZFTzuun9VBUBY'
@@ -27,19 +28,37 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [moviesList, setMoviesList] = useState([])
+  const [trendingMovies, setTrendingMovies] = useState([])
   const [debounceSearchTerm, setDebounceSearchTerm] = useState('')
 
-  useDebounce(() => setDebounceSearchTerm(searchTerm), 500, [searchTerm])
+  useDebounce(() => setDebounceSearchTerm(searchTerm), 800, [searchTerm])
 
-  const fetchMovies = async (query ) => {
+  const loadTrendingMovies = async () => {
+    try {
+      const movies = await getTrendingMovies()
+      setTrendingMovies(movies)
+    } catch (error) {
+      console.error(`Error fetching trending movies: ${error}`)
+    }
+  }
+
+  useEffect(() => {
+    loadTrendingMovies()
+  }, [])
+
+  const fetchMovies = async (query) => {
     setLoading(true)
     setErrorMessage('')
 
     const endpoint = query ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}` : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`
-
     try {
       const response = await (await fetch(endpoint, API_OPTIONS)).json()
-      setMoviesList(response.results)
+      setMoviesList(response.results || [])
+
+      // TODO: update appwrite to get the search term
+      if (query && response.results.length)
+        await updateSearchCount(query, response.results[0])
+
     } catch (error) {
       setErrorMessage("Error: Couldn't Fetch Movies")
       setMoviesList([])
@@ -76,22 +95,38 @@ export default function Home() {
           ? (
             <div className='flex items-center justify-center text-xl text-red-500'>{errorMessage}</div>
           )
-          : moviesList.length 
-          ? (
-            <div className='text-3xl flex items-center justify-center text-green-600'>
-              <div className='max-w-7xl px-5 py-10 xs:py-8'>
-                <div className='text-xl sm:pl-10 pl-6 text-gray-100 font-semibold'>All Movies</div>
-                <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-                  {moviesList.map(eachMovie => (
-                    <MovieCard key={eachMovie.id} movie={eachMovie} />
-                  ))}
+          : moviesList.length
+            ? (
+              <div className='text-3xl flex items-center justify-center text-green-600'>
+                <div className='max-w-7xl px-5 py-10 xs:py-8'>
+
+                  {trendingMovies.length ? (
+                    <div>
+                      <div className='fancy-text mt-[22px] text-nowrap text-xl sm:pl-10 pl-6 text-gray-100 font-semibold'>Trending Movies</div>
+                      {trendingMovies.map((movie, index) => (
+                        <div key={movie.$id} className='flex flex-row overflow-y-auto gap-5 -mt-10 w-full hide-scrollbar'>
+                          <div>{index + 1}</div>
+                          <Image
+                            src={movie.poster_url} alt=''
+                            className='w-[127px] h-[163px] rounded-lg object-cover -ml-3.5'
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+
+                  <div className='text-xl sm:pl-10 pl-6 text-gray-100 font-semibold'>All Movies</div>
+                  <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+                    {moviesList.map(eachMovie => (
+                      <MovieCard key={eachMovie.id} movie={eachMovie} />
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-          : (
-            <div className='text-white p-4 text-2xl text-center'>No Movies</div>
-          )
+            )
+            : (
+              <div className='text-white p-4 text-2xl text-center'>No Movies</div>
+            )
       }
     </div>
   );
