@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useState } from 'react';
+import { useDebounce } from 'react-use';
 
 import hero from '@/../public/hero.png'
 import Search from '@/components/Search';
@@ -26,6 +27,9 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [moviesList, setMoviesList] = useState([])
+  const [debounceSearchTerm, setDebounceSearchTerm] = useState('')
+
+  useDebounce(() => setDebounceSearchTerm(searchTerm), 500, [searchTerm])
 
   const fetchMovies = async (query ) => {
     setLoading(true)
@@ -35,7 +39,6 @@ export default function Home() {
 
     try {
       const response = await (await fetch(endpoint, API_OPTIONS)).json()
-console.log('results', response)
       setMoviesList(response.results)
     } catch (error) {
       setErrorMessage("Error: Couldn't Fetch Movies")
@@ -46,8 +49,8 @@ console.log('results', response)
   }
 
   useEffect(() => {
-    fetchMovies(searchTerm)
-  }, [searchTerm])
+    fetchMovies(debounceSearchTerm)
+  }, [debounceSearchTerm])
 
   return (
     <div className="bg-transparent">
