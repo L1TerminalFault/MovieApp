@@ -41,7 +41,7 @@ export default function ({ movie, moviesList, torrentLoading, torrentClient }) {
                 <Link
                   href={eachMovie.url}
                   key={eachMovie.url}
-                  className={`px-4 py-1 rounded-full m-2 bg-gray-800 text-sm text-white`}
+                  className={`px-4 py-1 rounded-full m-2 transition-all active:bg-gray-700 bg-gray-800 text-sm text-white`}
                 >
                   <div>
                     <div className="flex items-center pb-2">
