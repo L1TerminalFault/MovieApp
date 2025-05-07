@@ -58,7 +58,7 @@ export default function ({ moviesList, torrentLoading, torrentClient }) {
         TPB Download Candidates
       </div>
       {torrentLoading ? (
-        <div className="flex items-center justify-center h-72">
+        <div className="flex items-center justify-center h-[300px]">
           <Loading />
         </div>
       ) : (
@@ -122,7 +122,7 @@ export default function ({ moviesList, torrentLoading, torrentClient }) {
                 </Link>
               ))
           ) : (
-            <div className="text-gray-400 text-lg flex h-52 items-center justify-center">
+            <div className="text-gray-400 text-lg flex h-[300px] justify-center pt-16">
               No TBP Torrent Clients Found
             </div>
           )}

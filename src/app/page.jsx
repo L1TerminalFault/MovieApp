@@ -18,6 +18,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingTrendingMovies, setLoadingTrendingMovies] = useState(false)
   const [moviesList, setMoviesList] = useState([]);
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [debounceSearchTerm, setDebounceSearchTerm] = useState("");
@@ -28,11 +29,14 @@ export default function Home() {
   useDebounce(() => setDebounceSearchTerm(searchTerm), 800, [searchTerm]);
 
   const loadTrendingMovies = async () => {
+    setLoadingTrendingMovies(true)
     try {
       const movies = await (await fetch("/api/trendingMovies")).json();
       setTrendingMovies(movies);
     } catch (error) {
       console.error(`Error fetching trending movies: ${error}`);
+    } finally {
+      setLoadingTrendingMovies(false)
     }
   };
 
@@ -105,7 +109,7 @@ export default function Home() {
         <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
       {loading ? (
-        <div className="flex items-center justify-center p-9">
+        <div className="flex items-center justify-center p-52">
           <Loading />
         </div>
       ) : errorMessage ? (
@@ -115,14 +119,16 @@ export default function Home() {
       ) : moviesList.length ? (
         <div className="text-3xl flex items-center justify-center">
           <div className="max-w-7xl px-5 py-10 xs:py-8">
-            {trendingMovies?.length && !debounceSearchTerm ? (
+            {loadingTrendingMovies
+            ? <div className="flex items-center justify-center h-24"><Loading /></div>
+            : trendingMovies?.length && !debounceSearchTerm ? (
               <div className="mb-3 mx-4">
                 <div className="text-nowrap text-xl sm:pl-5 pl-2 text-gray-100 font-semibold">
                   Trending Movies
                 </div>
                 
                   {!trendingMovies.length ? (
-                    <div>No Trending Movies</div>
+                    <div className="text-gray-500 text-lg h-24">No Trending Movies</div>
                   ) : (
                     <div className="flex gap-3 mt-3 h-52 w-[calc(100vw-70px)] max-w-7xl justify-evenly overflow-x-scroll">
 
