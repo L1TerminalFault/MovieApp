@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link";
 import { HiDownload } from "react-icons/hi";
 import Loading from "@/components/Loading";
