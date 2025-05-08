@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { HiDownload } from "react-icons/hi";
 import Loading from "@/components/Loading";
+import { useEffect } from "react";
 
 const categories = {
   101: "Audio > Music",
@@ -50,8 +51,15 @@ const categories = {
   699: "Other > Other",
 };
 
-export default function ({ moviesList, torrentLoading, torrentClient }) {
+export default function ({ moviesList: data, torrentLoading, torrentClient }) {
   if (!torrentClient === "TPB") return;
+
+  const [moviesList, setMoviesList] = useState(null)
+  useEffect(() => {
+    if (!torrentLoading && data)
+      setMoviesList(data)
+  }, [data, torrentLoading])
+
   return (
     <>
       <div className="text-white font-bold px-4 py-2 mb-1 ml-2">
@@ -63,7 +71,7 @@ export default function ({ moviesList, torrentLoading, torrentClient }) {
         </div>
       ) : (
         <>
-          {parseInt(moviesList[0].id) ? (
+          {parseInt(moviesList[0]?.id) ? (
             moviesList
               // .filter(eachMovie => eachMovie.name.includes((movie.release_date.split('-')[0])))
               // .filter(eachMovie => eachMovie.name.includes(movie.title.split(' ')[0]))
