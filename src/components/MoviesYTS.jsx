@@ -27,7 +27,7 @@ export default function ({ movie, moviesList, torrentLoading, torrentClient }) {
       <div className="text-white font-bold px-4 py-2 mb-1 ml-2">
         YTS Download Candidates
       </div>
-      {torrentLoading ? (
+      {torrentLoading || !moviesList ? (
         <div className="flex items-center justify-center h-[300px]">
           <Loading />
         </div>

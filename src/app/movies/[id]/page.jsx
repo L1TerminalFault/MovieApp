@@ -12,7 +12,7 @@ import { useDataStore } from "@/lib/data";
 export default function () {
   const { id } = useParams();
   const { data } = useDataStore();
-  const [moviesList, setMoviesList] = useState([]);
+  const [moviesList, setMoviesList] = useState(null);
   const [loading, setLoading] = useState(true);
   const [movie, setMovie] = useState(null);
   const [error, setError] = useState(false);
