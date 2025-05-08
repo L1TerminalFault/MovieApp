@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link";
 import { HiDownload } from "react-icons/hi";
 import Loading from "@/components/Loading";
@@ -73,7 +71,7 @@ export default function ({ data, torrentLoading, torrentClient }) {
         </div>
       ) : (
         <>
-          {moviesList.length ? (
+          {parseInt(moviesList[0]?.id) ? (
             moviesList
               // .filter(eachMovie => eachMovie.name.includes((movie.release_date.split('-')[0])))
               // .filter(eachMovie => eachMovie.name.includes(movie.title.split(' ')[0]))
