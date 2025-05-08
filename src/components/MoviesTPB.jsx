@@ -71,7 +71,7 @@ export default function ({ data, torrentLoading, torrentClient }) {
         </div>
       ) : (
         <>
-          {parseInt(moviesList[0]?.id) ? (
+          {moviesList.length ? (
             moviesList
               // .filter(eachMovie => eachMovie.name.includes((movie.release_date.split('-')[0])))
               // .filter(eachMovie => eachMovie.name.includes(movie.title.split(' ')[0]))

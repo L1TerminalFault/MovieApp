@@ -148,7 +148,7 @@ export default function () {
             {torrentClient === "TPB" ? (
               <MoviesTPB
                 torrentClient={torrentClient}
-                data={data}
+                data={moviesList}
                 torrentLoading={torrentLoading}
               />
             ) : torrentClient === "YTS" ? (
