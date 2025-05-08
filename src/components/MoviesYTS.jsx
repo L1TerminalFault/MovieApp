@@ -27,13 +27,13 @@ export default function ({ movie, moviesList, torrentLoading, torrentClient }) {
       <div className="text-white font-bold px-4 py-2 mb-1 ml-2">
         YTS Download Candidates
       </div>
-      {torrentLoading || !moviesList ? (
+      {torrentLoading || !listOfMovies ? (
         <div className="flex items-center justify-center h-[300px]">
           <Loading />
         </div>
       ) : (
         <>
-          {listOfMovies?.length ? (
+          {listOfMovies.length ? (
             listOfMovies
               // .filter(eachMovie => eachMovie.name.includes((movie.release_date.split('-')[0])))
               // .filter(eachMovie => eachMovie.name.includes(movie.title.split(' ')[0]))
