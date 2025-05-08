@@ -53,7 +53,7 @@ const categories = {
   699: "Other > Other",
 };
 
-export default function ({ moviesList: data, torrentLoading, torrentClient }) {
+export default function ({ data, torrentLoading, torrentClient }) {
   if (!torrentClient === "TPB") return;
 
   const [moviesList, setMoviesList] = useState(null)
