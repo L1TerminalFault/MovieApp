@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { HiDownload } from "react-icons/hi";
 import Loading from "@/components/Loading";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const categories = {
   101: "Audio > Music",
