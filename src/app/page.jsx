@@ -95,9 +95,6 @@ export default function Home() {
       <div className='bg-cover flex items-center justify-center flex-col bg-no-repeat bg-center bg-[url("../../public/hero-bg.png")]'>
         <div className="flex flex-col items-center justify-center">
           {/* <div className='flex items-center justify-center'> */}
-          <div>
-            MovieApp
-          </div>
           {/* </div> */}
           <Image src={hero} alt="" className="px-8" />
           <div className=" text-center px-3 sm:max-w-[600px] max-w-80 sm:text-5xl text-4xl font-bold text-white">
